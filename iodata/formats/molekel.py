@@ -187,7 +187,7 @@ def load_one(lit: LineIterator, norm_threshold: float = 1e-4) -> dict:
     coeffsb = None
     energiesb = None
     occsb = None
-    atcharges = None
+    atcharges = {}
     irrepsa = None
     irrepsb = None
     # Using a loop because we're not entirely sure if sections in an MKL file

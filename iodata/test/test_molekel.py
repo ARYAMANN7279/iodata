@@ -184,3 +184,19 @@ def test_load_wrong_spin_mult():
     ):
         data = load_one(fn_molekel)
     assert_allclose(data.spinpol, 3)
+
+
+def test_load_dump_without_charges(tmpdir):
+    # This file has no $CHARGES section, so atcharges must be an empty dictionary,
+    # as for other formats, and it can be dumped again.
+    with (
+        as_file(files("iodata.test.data").joinpath("water_wrong_spinmult.mkl")) as fn_molekel,
+        pytest.warns(LoadWarning),
+    ):
+        mol1 = load_one(fn_molekel)
+    assert mol1.atcharges == {}
+    fn_tmp = os.path.join(tmpdir, "foo.mkl")
+    dump_one(mol1, fn_tmp)
+    mol2 = load_one(fn_tmp)
+    assert mol2.atcharges == {}
+    assert_allclose(mol2.atcoords, mol1.atcoords)
